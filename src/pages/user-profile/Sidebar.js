@@ -20,11 +20,12 @@ import {
   ExitToApp as LogoutIcon,
 } from "@mui/icons-material";
 import profileimg from "../../Images/profile.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <Drawer
       variant="permanent"
@@ -119,7 +120,7 @@ const Sidebar = () => {
           onClick={() => {
             localStorage.removeItem("token");
             localStorage.removeItem("name");
-            window.location.href = "/login"; // Navigate to login on logout
+            navigate("/login");
           }}
         >
           <ListItemIcon>

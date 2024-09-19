@@ -74,7 +74,7 @@ const Home = () => {
             <Box key={index} sx={{ flexShrink: 0 }}>
               <Button
                 color="inherit"
-                href={`/app/zomato`}
+                onClick={navigate("/app/zomato")}
                 style={{
                   display: "flex",
                   flexDirection: "column",
