@@ -1,13 +1,20 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Grid,
+  CircularProgress,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import applogoblue from "../../Images/appverse-blue-logo.png";
 import applogowhite from "../../Images/appverse-white-logo.png";
 import signupimg from "../../Images/signup-img.png";
 import googlelogo from "../../Images/google-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/api";
-
-// #9c1313
 
 const SignUpForm = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +24,8 @@ const SignUpForm = () => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); // Loading state for spinner
+  const [errorPopup, setErrorPopup] = useState(false); // Popup state for error
   const navigate = useNavigate();
 
   const validateField = (name, value) => {
@@ -74,6 +83,10 @@ const SignUpForm = () => {
     setErrors({ ...errors, [name]: error });
   };
 
+  const handleClosePopup = () => {
+    setErrorPopup(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -90,6 +103,7 @@ const SignUpForm = () => {
       return;
     }
 
+    setLoading(true); // Start loading spinner
     try {
       const response = await api.post("/signup", {
         name: formData.fullName,
@@ -97,21 +111,18 @@ const SignUpForm = () => {
         password: formData.password,
       });
 
-      // Assuming the API sends back a token or user data
       const { data } = response; // Extract the data from the response object
-
-      // Save only the required information to localStorage
       localStorage.setItem("token", data.token); // Adjust this based on the actual response structure
       localStorage.setItem("name", data.name); // Adjust this based on the actual response structure
 
-      // Navigate to home page after successful sign-up
-      navigate("/");
+      navigate("/"); // Navigate to home page after successful sign-up
     } catch (error) {
       console.error("Error during sign up:", error.response);
-
-      // Extract a meaningful error message to display
       const errorMessage = error.response?.data?.message || "Sign up failed";
       setErrors({ submit: errorMessage });
+      setErrorPopup(true); // Trigger error popup
+    } finally {
+      setLoading(false); // Stop loading spinner
     }
   };
 
@@ -382,7 +393,11 @@ const SignUpForm = () => {
                     },
                   }}
                 >
-                  Sign In
+                  {loading ? (
+                    <CircularProgress size={24} sx={{ color: "#fff" }} />
+                  ) : (
+                    "Sign Up"
+                  )}
                 </Button>
                 <Typography
                   sx={{
@@ -405,13 +420,27 @@ const SignUpForm = () => {
                     },
                   }}
                 >
-                  Sign in using Google
+                  Sign up using Google
                 </Button>
               </Box>
             </Box>
           </Grid>
         </Grid>
       </Box>
+      <Snackbar
+        open={errorPopup}
+        autoHideDuration={6000}
+        onClose={handleClosePopup}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleClosePopup}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errors.submit}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

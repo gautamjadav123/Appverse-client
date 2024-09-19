@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Grid,
+  CircularProgress,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import applogoblue from "../../Images/appverse-blue-logo.png";
 import applogowhite from "../../Images/appverse-white-logo.png";
 import loginimg from "../../Images/login-img.png";
@@ -13,6 +22,8 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false); // For loading state
+  const [errorPopup, setErrorPopup] = useState(false); // For showing the error popup
   const navigate = useNavigate();
 
   const validateField = (name, value) => {
@@ -52,6 +63,8 @@ const Login = () => {
       return;
     }
 
+    setIsLoading(true); // Start loading
+
     try {
       const response = await api.post("/login", {
         email: formData.username,
@@ -60,11 +73,18 @@ const Login = () => {
       console.log(response);
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("name", response.data.name);
+      setIsLoading(false); // Stop loading on success
       navigate("/");
     } catch (error) {
-      console.error("Login error:", error.response.data);
-      setErrors({ submit: error.response.data.message || "Login failed" });
+      console.error("Login error:", error.response?.data);
+      setErrors({ submit: error.response?.data?.message || "Login failed" });
+      setIsLoading(false); // Stop loading on error
+      setErrorPopup(true); // Show error popup
     }
+  };
+
+  const handleClosePopup = () => {
+    setErrorPopup(false); // Close the error popup
   };
 
   return (
@@ -153,29 +173,6 @@ const Login = () => {
                 style={{ width: "9vw" }}
               />
             </Box>
-            <Box
-              sx={{
-                position: "absolute",
-                top: "10px",
-                right: { xs: "15px", md: "60px" },
-                display: "flex",
-                gap: "40px",
-              }}
-            >
-              <Typography
-                ypogra
-                phy
-                variant="h6"
-                sx={{ color: "#fff", fontWeight: "bold" }}
-              >
-                <Link
-                  to={"/"}
-                  style={{ textDecoration: "none", color: "#fff" }}
-                >
-                  Home
-                </Link>
-              </Typography>
-            </Box>
             <Box px={{ xs: 2, md: 5 }} pt={3}>
               <Typography
                 variant="h4"
@@ -259,22 +256,28 @@ const Login = () => {
                     {errors.submit}
                   </Typography>
                 )}
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    width: "150px",
-                    borderRadius: "10px",
-                    backgroundColor: "blue",
-                    color: "#fff",
-                    alignSelf: "center",
-                    "&:hover": {
-                      backgroundColor: "#155a99",
-                    },
-                  }}
-                >
-                  Login
-                </Button>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  {isLoading ? (
+                    <CircularProgress />
+                  ) : (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        width: "150px",
+                        borderRadius: "10px",
+                        backgroundColor: "blue",
+                        color: "#fff",
+                        alignSelf: "center",
+                        "&:hover": {
+                          backgroundColor: "#155a99",
+                        },
+                      }}
+                    >
+                      Login
+                    </Button>
+                  )}
+                </Box>
                 <Typography
                   sx={{
                     margin: "3px auto",
@@ -323,6 +326,16 @@ const Login = () => {
           </Grid>
         </Grid>
       </Box>
+      {/* Error Popup */}
+      <Snackbar
+        open={errorPopup}
+        autoHideDuration={6000}
+        onClose={handleClosePopup}
+      >
+        <Alert onClose={handleClosePopup} severity="error">
+          {errors.submit || "Something went wrong!"}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
