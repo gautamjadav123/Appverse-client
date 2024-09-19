@@ -118,9 +118,9 @@ const Sidebar = () => {
         <ListItem
           button
           onClick={() => {
+            navigate("/login");
             localStorage.removeItem("token");
             localStorage.removeItem("name");
-            navigate("/login");
           }}
         >
           <ListItemIcon>
