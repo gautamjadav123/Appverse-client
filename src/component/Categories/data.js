@@ -303,16 +303,16 @@ const advertisementData = [
     image: require("../../Images/new-app/indigo.png"),
     rating: 3.9,
   },
-  {
-    name: "Adobe",
-    image: require("../../Images/new-app/adobe.png"),
-    rating: 3.9,
-  },
-  {
-    name: "GitHub",
-    image: require("../../Images/new-app/github.png"),
-    rating: 3.9,
-  },
+  // {
+  //   name: "Adobe",
+  //   image: require("../../Images/new-app/adobe.png"),
+  //   rating: 3.9,
+  // },
+  // {
+  //   name: "GitHub",
+  //   image: require("../../Images/new-app/github.png"),
+  //   rating: 3.9,
+  // },
   // {
   //   name: "Zomato",
   //   image: require("../../Images/new-app/zometo.png"),

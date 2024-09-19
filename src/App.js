@@ -17,8 +17,8 @@ import UPIPayment from "./pages/payment/UPIPayment";
 import CardPayment from "./pages/payment/CardPayment";
 import AppMainPage from "./pages/app-section/AppMainPage";
 import FoodAppsMainPage from "./pages/food-apps-section/FoodAppsMainPage";
-import GameHome from "./pages/games-section/game-home/GameHome";
-import GameApp from "./pages/games-section/game-app-section/GameApp";
+// import GameHome from "./pages/games-section/game-home/GameHome";
+// import GameApp from "./pages/games-section/game-app-section/GameApp";
 import ResetPassword from "./pages/Authentication-pages/ResetPassword";
 import NewPassword from "./pages/Authentication-pages/ResetPassword";
 
@@ -45,12 +45,12 @@ function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="payment" element={<PaymentModal />} />
           </Route>
-          <Route path="app/:name" element={<AppMainPage />} />
+          <Route path="app/zomato" element={<AppMainPage />} />
           <Route path="/search-results" element={<FoodAppsMainPage />} />
 
           {/* Game section */}
-          <Route path="/games" element={<GameHome />} />
-          <Route path="/games/:name" element={<GameApp />} />
+          {/* <Route path="/games" element={<GameHome />} /> */}
+          {/* <Route path="/games/:name" element={<GameApp />} /> */}
         </Routes>
       </BrowserRouter>
       {/* <Footer /> */}

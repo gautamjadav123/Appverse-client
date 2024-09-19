@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import applogowhite from "../../Images/appverse-white-logo.png";
+import homeicon from "../../Images/home-icon.svg";
 import appsicon from "../../Images/app-icon.png";
 import gameicon from "../../Images/game-icon.png";
 import categoryicon from "../../Images/category-icon.png";
@@ -64,7 +65,7 @@ function Header() {
             mr: "13vw",
           }}
         >
-          {[
+          {/* {[
             {
               label: "Home",
               href: "/",
@@ -73,30 +74,93 @@ function Header() {
             { label: "Games", href: "/games", icon: gameicon },
             { label: "Apps", href: "/apps", icon: appsicon },
             { label: "Categories", href: "/categories", icon: categoryicon },
-          ].map((item) => (
-            <Button
-              key={item.label}
-              color="inherit"
-              href={item.href}
+          ].map((item) => ( */}
+          <Button
+            color="inherit"
+            href={"/"}
+            style={{
+              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              padding: "1vh",
+            }}
+          >
+            <img
+              src={homeicon}
+              alt={`home Icon`}
               style={{
-                color: "white",
-                display: "flex",
-                flexDirection: "column",
-                padding: "1vh",
+                width: "2vw",
+                height: "2vw",
+                marginBottom: "0.5vh",
               }}
-            >
-              <img
-                src={item.icon}
-                alt={`${item.label} Icon`}
-                style={{
-                  width: "2vw", // Consistent width
-                  height: "2vw", // Consistent height for all icons
-                  marginBottom: "0.5vh", // Space between icon and text
-                }}
-              />
-              {item.label}
-            </Button>
-          ))}
+            />
+            Home
+          </Button>
+          <Button
+            color="inherit"
+            href={"/games"}
+            style={{
+              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              padding: "1vh",
+            }}
+          >
+            <img
+              src={gameicon}
+              alt={`home Icon`}
+              style={{
+                width: "3vw",
+                height: "2vw",
+                marginBottom: "0.5vh",
+              }}
+            />
+            Game
+          </Button>
+          <Button
+            color="inherit"
+            href={"/apps"}
+            style={{
+              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              padding: "1vh",
+            }}
+          >
+            <img
+              src={appsicon}
+              alt={`home Icon`}
+              style={{
+                width: "2vw",
+                height: "2vw",
+                marginBottom: "0.5vh",
+              }}
+            />
+            Apps
+          </Button>
+          <Button
+            color="inherit"
+            href={"/categories"}
+            style={{
+              color: "white",
+              display: "flex",
+              flexDirection: "column",
+              padding: "1vh",
+            }}
+          >
+            <img
+              src={categoryicon}
+              alt={`home Icon`}
+              style={{
+                width: "2vw",
+                height: "2vw",
+                marginBottom: "0.5vh",
+              }}
+            />
+            Categories
+          </Button>
+
+          {/* ))} */}
         </Box>
 
         {isLoggedIn ? (
