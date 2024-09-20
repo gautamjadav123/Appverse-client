@@ -22,8 +22,8 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false); // For loading state
-  const [errorPopup, setErrorPopup] = useState(false); // For showing the error popup
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorPopup, setErrorPopup] = useState(false);
   const navigate = useNavigate();
 
   const validateField = (name, value) => {
@@ -173,6 +173,27 @@ const Login = () => {
                 style={{ width: "9vw" }}
               />
             </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "10px",
+                right: { xs: "15px", md: "60px" },
+                display: "flex",
+                gap: "40px",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ color: "#fff", fontWeight: "bold" }}
+              >
+                <Link
+                  to={"/"}
+                  style={{ textDecoration: "none", color: "#fff" }}
+                >
+                  Home
+                </Link>
+              </Typography>
+            </Box>
             <Box px={{ xs: 2, md: 5 }} pt={3}>
               <Typography
                 variant="h4"
@@ -251,7 +272,7 @@ const Login = () => {
                 {errors.submit && (
                   <Typography
                     variant="body2"
-                    sx={{ color: "red", textAlign: "center" }}
+                    sx={{ color: "#9c1313", textAlign: "center" }}
                   >
                     {errors.submit}
                   </Typography>

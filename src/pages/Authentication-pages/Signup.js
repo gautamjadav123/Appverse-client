@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import applogoblue from "../../Images/appverse-blue-logo.png";
 import applogowhite from "../../Images/appverse-white-logo.png";
-import signupimg from "../../Images/signup-img.png";
+import signupimg from "../../Images/signup.jpg";
 import googlelogo from "../../Images/google-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../api/api";
@@ -24,8 +24,8 @@ const SignUpForm = () => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false); // Loading state for spinner
-  const [errorPopup, setErrorPopup] = useState(false); // Popup state for error
+  const [loading, setLoading] = useState(false);
+  const [errorPopup, setErrorPopup] = useState(false);
   const navigate = useNavigate();
 
   const validateField = (name, value) => {
@@ -103,7 +103,7 @@ const SignUpForm = () => {
       return;
     }
 
-    setLoading(true); // Start loading spinner
+    setLoading(true);
     try {
       const response = await api.post("/signup", {
         name: formData.fullName,
@@ -111,18 +111,18 @@ const SignUpForm = () => {
         password: formData.password,
       });
 
-      const { data } = response; // Extract the data from the response object
-      localStorage.setItem("token", data.token); // Adjust this based on the actual response structure
-      localStorage.setItem("name", data.name); // Adjust this based on the actual response structure
+      const { data } = response;
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("name", data.name);
 
-      navigate("/"); // Navigate to home page after successful sign-up
+      navigate("/");
     } catch (error) {
       console.error("Error during sign up:", error.response);
       const errorMessage = error.response?.data?.message || "Sign up failed";
       setErrors({ submit: errorMessage });
-      setErrorPopup(true); // Trigger error popup
+      setErrorPopup(true);
     } finally {
-      setLoading(false); // Stop loading spinner
+      setLoading(false);
     }
   };
 
@@ -374,7 +374,7 @@ const SignUpForm = () => {
                 {errors.submit && (
                   <Typography
                     variant="body2"
-                    sx={{ color: "red", textAlign: "center" }}
+                    sx={{ color: "#9c1313", textAlign: "center" }}
                   >
                     {errors.submit}
                   </Typography>

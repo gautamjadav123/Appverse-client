@@ -1,96 +1,3 @@
-// import React, { useState } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
-// import {
-//   Box,
-//   Button,
-//   TextField,
-//   Typography,
-//   Container,
-//   CssBaseline,
-//   Grid,
-//   Paper,
-// } from "@mui/material";
-// import axios from "axios";
-
-// const ResetPassword = () => {
-//   const { token } = useParams();
-//   const navigate = useNavigate();
-//   const [password, setPassword] = useState("");
-
-//   const handleResetPassword = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const response = await axios.post(
-//         `http://localhost:8080/auth/reset-password/${token}`,
-//         { password }
-//       );
-//       const { success, message } = response.data;
-//       if (success) {
-//         console.log(message); // Log the success message
-//         setTimeout(() => {
-//           navigate("/login"); // Redirect to login after successful reset
-//         }, 1000);
-//       } else {
-//         console.log(message); // Log the failure message
-//       }
-//     } catch (error) {
-//       console.error(error.response?.data?.message || error.message); // Log the error
-//     }
-//   };
-
-//   return (
-//     <Container component="main" maxWidth="xs">
-//       <CssBaseline />
-//       <Box
-//         sx={{
-//           marginTop: 8,
-//           display: "flex",
-//           flexDirection: "column",
-//           alignItems: "center",
-//         }}
-//       >
-//         <Paper elevation={3} sx={{ p: 4, width: "100%" }}>
-//           <Typography component="h1" variant="h5" gutterBottom>
-//             Reset Password
-//           </Typography>
-//           <Box
-//             component="form"
-//             onSubmit={handleResetPassword}
-//             noValidate
-//             sx={{ mt: 1 }}
-//           >
-//             <TextField
-//               variant="outlined"
-//               margin="normal"
-//               required
-//               fullWidth
-//               id="password"
-//               label="New Password"
-//               name="password"
-//               type="password"
-//               autoComplete="current-password"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               autoFocus
-//             />
-//             <Button
-//               type="submit"
-//               fullWidth
-//               variant="contained"
-//               color="primary"
-//               sx={{ mt: 3, mb: 2 }}
-//             >
-//               Reset Password
-//             </Button>
-//           </Box>
-//         </Paper>
-//       </Box>
-//     </Container>
-//   );
-// };
-
-// export default ResetPassword;
-
 // NewPassword Component
 import React, { useState } from "react";
 import {
@@ -121,14 +28,12 @@ const ResetPassword = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Dialog state
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     if (successMessage) {
-      navigate("/login"); // Redirect to login after closing the popup if successful
+      navigate("/login");
     }
   };
 
@@ -140,7 +45,7 @@ const ResetPassword = () => {
     // Check if passwords match
     if (newPassword !== confirmPassword) {
       setErrorMessage("Passwords do not match");
-      setOpenDialog(true); // Show the error in the popup
+      setOpenDialog(true);
       setLoading(false);
       return;
     }
@@ -150,13 +55,13 @@ const ResetPassword = () => {
         password: newPassword,
       });
       setSuccessMessage("Your password has been reset successfully.");
-      setOpenDialog(true); // Show success message in the popup
+      setOpenDialog(true);
     } catch (error) {
       setErrorMessage(
         error.response?.data?.message ||
           "Failed to reset password. Please try again."
       );
-      setOpenDialog(true); // Show error message in the popup
+      setOpenDialog(true);
     } finally {
       setLoading(false);
     }

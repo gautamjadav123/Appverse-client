@@ -219,11 +219,11 @@ const musicapps = [
     image: require("../../Images/music-apps/image10.png"),
     rating: 3.9,
   },
-  {
-    name: "Gaana",
-    image: require("../../Images/music-apps/image11.png"),
-    rating: 3.9,
-  },
+  // {
+  //   name: "Gaana",
+  //   image: require("../../Images/music-apps/image11.png"),
+  //   rating: 3.9,
+  // },
   // Add more app objects here
 ];
 

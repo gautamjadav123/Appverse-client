@@ -23,10 +23,10 @@ function NewReleaseApp({ app }) {
           marginBottom: "8px",
         }}
       />
-      <Typography variant="body2" fontSize={"0.7rem"} alignSelf="start">
+      <Typography variant="body2" fontSize={"0.7rem"} alignSelf="center">
         {app.name}
       </Typography>
-      <Box sx={{ display: "flex", marginTop: "4px", alignSelf: "start" }}>
+      <Box sx={{ display: "flex", marginTop: "4px", alignSelf: "center" }}>
         <Typography variant="caption">{app.rating}</Typography>
         <StarIcon sx={{ color: "grey", marginLeft: "3px", fontSize: "16px" }} />
       </Box>

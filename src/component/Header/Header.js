@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import applogowhite from "../../Images/appverse-white-logo.png";
 import homeicon from "../../Images/home-icon.svg";
 import appsicon from "../../Images/app-icon.png";
@@ -65,16 +65,6 @@ function Header() {
             mr: "13vw",
           }}
         >
-          {/* {[
-            {
-              label: "Home",
-              href: "/",
-              icon: require("../../Images/home-icon.svg").default,
-            },
-            { label: "Games", href: "/games", icon: gameicon },
-            { label: "Apps", href: "/apps", icon: appsicon },
-            { label: "Categories", href: "/categories", icon: categoryicon },
-          ].map((item) => ( */}
           <Button
             color="inherit"
             href={"/"}
@@ -173,13 +163,6 @@ function Header() {
             }}
             onClick={() => navigate("/profile/information")}
           >
-            {/* Remove img comment if needed */}
-            {/* <img
-    src={require("../../Images/store.svg").default}
-    alt="Game Icon"
-    style={{ width: "3vw", marginBottom: "0.5vh" }}
-  /> */}
-
             <Box
               sx={{
                 display: "flex",
@@ -240,8 +223,7 @@ function Header() {
                 width: "9vw",
                 height: "5vh",
               }}
-              o
-              nClick={() => {
+              onClick={() => {
                 navigate("/signup");
               }}
             >

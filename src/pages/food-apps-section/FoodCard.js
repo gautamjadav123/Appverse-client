@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  Card,
-  CardMedia,
-  CardContent,
-} from "@mui/material";
+import { Box, Button, Typography, Card, CardMedia } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
 export default function FoodCard({ app }) {

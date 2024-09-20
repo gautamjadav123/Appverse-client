@@ -1,13 +1,10 @@
 import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import Searchbox from "../../component/Search-box/Searchbox";
-import AppTabs from "./AppTabs";
 import Banner from "./Banner";
 import FoodCard from "./FoodCard";
 import Header from "../../component/Header/Header";
-import { gameData } from "../../component/Categories/data";
 import Footer from "../../component/footer/Footer";
-import { Category } from "@mui/icons-material";
 
 const foodApps = [
   {
