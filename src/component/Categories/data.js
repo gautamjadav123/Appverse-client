@@ -219,6 +219,21 @@ const musicapps = [
     image: require("../../Images/music-apps/image10.png"),
     rating: 3.9,
   },
+  {
+    name: "Amazon Music",
+    image: require("../../Images/music-apps/image2.png"),
+    rating: 4.4,
+  },
+  {
+    name: "Soundcloud",
+    image: require("../../Images/music-apps/image3.png"),
+    rating: 4.1,
+  },
+  {
+    name: "Pandora",
+    image: require("../../Images/music-apps/image4.png"),
+    rating: 3.9,
+  },
   // {
   //   name: "Gaana",
   //   image: require("../../Images/music-apps/image11.png"),
