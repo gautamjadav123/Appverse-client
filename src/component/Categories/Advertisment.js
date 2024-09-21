@@ -16,17 +16,17 @@ const Advertisment = () => {
         <Typography
           sx={{
             color: "black",
-            fontSize: "20px",
-            fontWeight: 500,
+            fontSize: "14px",
+            fontWeight: 700,
             mb: 2,
-            display: "fl     ex",
+            display: "flex",
             justifyContent: "center",
           }}
         >
           Advertise with us
         </Typography>
 
-        <Typography variant="subtitle1" sx={{ p: 1, fontWeight: 500 }}>
+        <Typography sx={{ p: 1, fontWeight: 400, fontSize: "12px" }}>
           Boost your business visibility with us! Reach over 6 million views on
           our platform. Click here to start taking your business to new heights.
         </Typography>
@@ -37,8 +37,12 @@ const Advertisment = () => {
               color: "#fff",
               padding: "1vh 2vw",
               borderRadius: "0.5vw",
-              width: "6vw",
+              width: "7vw",
               height: "5vh",
+              fontSize: "10px",
+              "&:hover": {
+                backgroundColor: "#00f",
+              },
             }}
           >
             Resister
