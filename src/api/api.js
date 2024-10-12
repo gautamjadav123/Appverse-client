@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://appverse-server.onrender.com/auth",
+  // baseURL: "https://appverse-server.onrender.com/auth",
+  baseURL: "http://localhost:8080/auth",
 });
 
 export default api;

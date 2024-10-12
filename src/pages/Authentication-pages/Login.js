@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -25,14 +25,11 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorPopup, setErrorPopup] = useState(false);
   const navigate = useNavigate();
-
   const validateField = (name, value) => {
     let error = "";
-
     if (!value.trim()) {
       error = `${name === "username" ? "User Name" : "Password"} is required`;
     }
-
     return error;
   };
 
@@ -49,7 +46,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const validationErrors = {};
     Object.keys(formData).forEach((field) => {
       const error = validateField(field, formData[field]);
@@ -57,14 +53,12 @@ const Login = () => {
         validationErrors[field] = error;
       }
     });
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
     setIsLoading(true); // Start loading
-
     try {
       const response = await api.post("/login", {
         email: formData.username,
@@ -86,6 +80,46 @@ const Login = () => {
   const handleClosePopup = () => {
     setErrorPopup(false); // Close the error popup
   };
+
+  const handleGoogleLogin = async (response) => {
+    try {
+      const res = await fetch("http://localhost:8080/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: response.credential }), //Send Google token to backend
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        console.log(result.message);
+        localStorage.setItem("token", result.jwtToken);
+        localStorage.setItem("loggedInUser", result.name);
+        setTimeout(() => {
+          navigate("/media-gallery");
+        }, 1000);
+      } else {
+        console.log(result.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id:
+        "56632766008-d8ti77l4d1puphs1pvj1lvv7sf2b693i.apps.googleusercontent.com", //Ensure this matches
+
+      callback: handleGoogleLogin, //Google Sign-In callback
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("googleSignInDiv"),
+      { theme: "outline", size: "large" } //Customize button
+    );
+  }, []);
 
   return (
     <Box
@@ -235,10 +269,7 @@ const Login = () => {
                   }}
                 />
                 {errors.username && (
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "red", mt: 1, mb: 2 }}
-                  >
+                  <Typography variant="body2" sx={{ color: "#9c1313" }}>
                     {errors.username}
                   </Typography>
                 )}
@@ -265,7 +296,7 @@ const Login = () => {
                   }}
                 />
                 {errors.password && (
-                  <Typography variant="body2" sx={{ color: "red" }}>
+                  <Typography variant="body2" sx={{ color: "#9c1313" }}>
                     {errors.password}
                   </Typography>
                 )}
@@ -328,20 +359,8 @@ const Login = () => {
                     Create New Account
                   </Link>
                 </Typography>
-                <Button
-                  variant="outlined"
-                  startIcon={<img src={googlelogo} alt="Google logo" />}
-                  sx={{
-                    borderRadius: "10px",
-                    color: "black",
-                    backgroundColor: "#fff",
-                    "&:hover": {
-                      backgroundColor: "#f0f0f0",
-                    },
-                  }}
-                >
-                  Login using Google
-                </Button>
+                <div id="googleSignInDiv" />{" "}
+                {/* Google Sign-In button rendered here */}
               </Box>
             </Box>
           </Grid>
