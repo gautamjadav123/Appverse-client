@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Box,
+  Avatar,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import applogowhite from "../../Images/appverse-white-logo.png";
 import homeicon from "../../Images/home-icon.svg";
@@ -7,19 +14,51 @@ import appsicon from "../../Images/app-icon.png";
 import gameicon from "../../Images/game-icon.png";
 import categoryicon from "../../Images/category-icon.png";
 import userProfileImage from "../../Images/profile.png";
+import api from "../../api/api";
 
 function Header() {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [imgurl, setImgurl] = useState("");
+  const [username, setUsername] = useState("");
   let name = localStorage.getItem("name");
+  const id = localStorage.getItem("userid");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get(`/api/user/profile/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("all data", response.data);
+        setImgurl(response.data.avatar);
+        setUsername(response.data.fullName);
+      } catch (err) {
+        setError("Failed to load profile data");
+        console.error(err);
+      }
+    };
+
+    fetchProfile();
     // Check if the token is present in localStorage
-    const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [[id, token]]);
+
+  // Function to get initials from the name
+  const getInitials = (name) => {
+    if (!name) return "";
+    const nameParts = name.trim().split(" ");
+    const firstInitial = nameParts[0]?.charAt(0).toUpperCase() || "";
+    const lastInitial =
+      nameParts.length > 1
+        ? nameParts[nameParts.length - 1].charAt(0).toUpperCase()
+        : "";
+    return firstInitial + lastInitial;
+  };
 
   return (
     <AppBar
@@ -173,15 +212,29 @@ function Header() {
                 padding: "0.5vw 1vw",
               }}
             >
-              <img
-                src={userProfileImage}
-                alt="User Profile"
-                style={{
-                  width: "2.5vw",
-                  height: "2.5vw",
-                  borderRadius: "50%",
-                }}
-              />
+              {imgurl ? (
+                <img
+                  src={imgurl}
+                  alt="User Profile"
+                  style={{
+                    width: "3.5vw",
+                    height: "3.5vw",
+                    borderRadius: "50%",
+                  }}
+                />
+              ) : (
+                <Avatar
+                  sx={{
+                    width: "3.5vw",
+                    height: "3.5vw",
+                    backgroundColor: "grey",
+                    fontSize: "1vw",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {getInitials(username)}
+                </Avatar>
+              )}
               <Typography
                 variant="h8"
                 style={{ color: "white", textAlign: "center" }}

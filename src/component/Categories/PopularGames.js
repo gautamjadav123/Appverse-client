@@ -14,7 +14,7 @@ function PopularGames({ app }) {
       }}
     >
       <img
-        src={app.image}
+        src={app.icon}
         alt={app.name}
         style={{
           width: "170px",

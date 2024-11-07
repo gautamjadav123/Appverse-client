@@ -1,71 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, LinearProgress, Rating, Button } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import ReviewPopup from "./ReviewPopup"; // Import the ReviewPopup component
+import api from "../../api/api";
 
 const AppRatings = () => {
-  const rating = 4.5;
-  const totalRatings = 2024;
-
-  // Mock data for ratings breakdown
-  const ratingsData = [
-    { star: 5, value: 80 },
-    { star: 4, value: 60 },
-    { star: 3, value: 30 },
-    { star: 2, value: 10 },
-    { star: 1, value: 5 },
-  ];
-
-  // Mock data for reviews
-  const reviewsData = [
-    {
-      id: 1,
-      text: "Zomato is indispensable for any foodie! The app offers an excellent range of options for discovering restaurants and cafes.",
-      rating: 5,
-      user: "Userabc123",
-      time: "a month ago",
-    },
-    {
-      id: 2,
-      text: "Great experience using the app. The customer support is also very responsive.",
-      rating: 4,
-      user: "Userxyz456",
-      time: "2 weeks ago",
-    },
-    {
-      id: 3,
-      text: "The rewards system keeps me coming back, highly recommended!",
-      rating: 5,
-      user: "Userpqr789",
-      time: "3 weeks ago",
-    },
-    {
-      id: 4,
-      text: "Some improvements could be made, but overall it’s a solid app for ordering food.",
-      rating: 4,
-      user: "Usermno123",
-      time: "a week ago",
-    },
-  ];
-
-  const [showFullText, setShowFullText] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
+  const [totalRatings, setTotalRatings] = useState(0);
+  const [reviewsData, setReviewsData] = useState([]);
+  const [ratingsData, setRatingsData] = useState([]);
   const [open, setOpen] = useState(false);
   const [visibleReviews, setVisibleReviews] = useState(1); // Track how many reviews to show
 
-  // Function to toggle the text visibility
-  const toggleTextVisibility = () => {
-    setShowFullText(!showFullText);
+  const token = localStorage.getItem("token");
+
+  // Fetch data from the API when the component mounts
+  const fetchReviews = async () => {
+    try {
+      const response = await api.get("/api/appsdata/zomato/reviews");
+      const data = response.data;
+      console.log(data);
+      setAverageRating(data.averageRating);
+      setReviewsData(data.reviews); // Assuming the API returns an array of reviews
+      setRating(parseFloat(data.rating));
+      setTotalRatings(data.reviews.length);
+
+      // Create ratings breakdown dynamically
+      const breakdown = [0, 0, 0, 0, 0];
+      data.reviews.forEach((review) => {
+        breakdown[review.rating - 1]++;
+      });
+      setRatingsData(
+        breakdown.map((count, index) => ({
+          star: 5 - index,
+          value: (count / data.reviews.length) * 100,
+        }))
+      );
+    } catch (error) {
+      console.error("Error fetching reviews", error);
+    }
   };
 
-  // Function to open the dialog
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  // Function to close the dialog
-  const handleClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    fetchReviews();
+  }, []);
 
   // Function to show more reviews
   const handleShowMoreReviews = () => {
@@ -75,6 +54,19 @@ const AppRatings = () => {
   // Function to show less reviews
   const handleShowLessReviews = () => {
     setVisibleReviews(1); // Reset back to 1 visible review
+  };
+
+  // Function to handle adding a review
+  const handleAddReview = async (newReview) => {
+    try {
+      await api.post("/api/appsdata/zomato/review", newReview, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setOpen(false); // Close the popup after submitting
+      fetchReviews(); // Refresh the reviews after adding the new one
+    } catch (error) {
+      console.error("Error adding review", error); // Check for any errors
+    }
   };
 
   return (
@@ -113,7 +105,7 @@ const AppRatings = () => {
             color: "#333333",
           }}
         >
-          {rating}
+          {averageRating}
         </Typography>
 
         {/* Star Rating Breakdown */}
@@ -197,7 +189,7 @@ const AppRatings = () => {
               color: "#333333",
             }}
           >
-            {review.text}
+            {review.description}
           </Typography>
 
           <Box
@@ -217,10 +209,10 @@ const AppRatings = () => {
               variant="body2"
               sx={{ fontWeight: "bold", marginRight: "8px", color: "#333333" }}
             >
-              {review.user}
+              {review.username}
             </Typography>
             <Typography variant="body2" sx={{ color: "#888888" }}>
-              {review.time}
+              {new Date(review.createdAt).toLocaleDateString()}
             </Typography>
           </Box>
         </Box>
@@ -245,11 +237,15 @@ const AppRatings = () => {
 
       {/* Add Review Button */}
       <Box sx={{ display: "flex", justifyContent: "right" }}>
-        <Button onClick={handleClickOpen}>Add Review</Button>
+        <Button onClick={() => setOpen(true)}>Add Review</Button>
       </Box>
 
-      {/* Use the ReviewPopup component */}
-      <ReviewPopup open={open} onClose={handleClose} />
+      {/* Review Popup */}
+      <ReviewPopup
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={handleAddReview}
+      />
     </Box>
   );
 };

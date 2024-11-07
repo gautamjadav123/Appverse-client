@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, Button, Avatar, Divider } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 
-function AppSidebar() {
+function AppSidebar({ data }) {
   return (
     <Box
       sx={{
@@ -16,7 +16,7 @@ function AppSidebar() {
     >
       {/* App Icon */}
       <Avatar
-        src={require("../../Images/new-app/zometo.png")}
+        src={data.icon}
         alt="Zomato"
         sx={{
           width: 100,
@@ -27,7 +27,7 @@ function AppSidebar() {
       />
       {/* App Name */}
       <Typography variant="h6" gutterBottom>
-        Zomato
+        {data.name}
       </Typography>
       {/* Subtitle */}
       <Typography variant="subtitle2" color="primary" gutterBottom>

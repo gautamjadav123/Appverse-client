@@ -61,33 +61,32 @@ const items = [
   },
 ];
 
-const AppImages = () => {
-  const [open, setOpen] = useState(false); // State to manage dialog visibility
-  const [selectedIndex, setSelectedIndex] = useState(null); // Track the index of the selected image
+const AppImages = ({ data }) => {
+  const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   const handleClickOpen = (index) => {
-    setSelectedIndex(index); // Set the clicked image index
-    setOpen(true); // Open the dialog
+    setSelectedIndex(index);
+    setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false); // Close the dialog
-    setSelectedIndex(null); // Reset the selected index
+    setOpen(false);
+    setSelectedIndex(null);
   };
 
   const handlePrevImage = () => {
     setSelectedIndex((prevIndex) =>
-      prevIndex > 0 ? prevIndex - 1 : items.length - 1
+      prevIndex > 0 ? prevIndex - 1 : data.mediaUrls.length - 1
     );
   };
 
   const handleNextImage = () => {
     setSelectedIndex((prevIndex) =>
-      prevIndex < items.length - 1 ? prevIndex + 1 : 0
+      prevIndex < data.mediaUrls.length - 1 ? prevIndex + 1 : 0
     );
   };
 
-  // Keyboard navigation logic
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (open) {
@@ -99,10 +98,8 @@ const AppImages = () => {
       }
     };
 
-    // Attach the event listener to the document when the dialog is open
     document.addEventListener("keydown", handleKeyDown);
 
-    // Clean up the event listener when the dialog is closed
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
@@ -123,45 +120,47 @@ const AppImages = () => {
         },
       }}
     >
-      {items.map((item, index) => (
-        <Card
-          key={index}
-          sx={{
-            maxWidth: "150px", // Increase card size slightly
-            flexShrink: 0,
-            backgroundColor: "red",
-            padding: "16px",
-            borderRadius: "8px",
-            textAlign: "center",
-            color: "white",
-            cursor: "pointer", // Make it look clickable
-          }}
-          onClick={() => handleClickOpen(index)} // Open dialog with image index
-        >
-          <CardMedia
-            component="img"
-            image={item.img}
-            alt={item.text}
-            sx={{ height: "220px", objectFit: "contain" }} // Increase image height
-          />
-        </Card>
-      ))}
+      {data.mediaUrls ? (
+        data.mediaUrls.map((item, index) => (
+          <Card
+            key={index}
+            sx={{
+              maxWidth: "150px",
+              flexShrink: 0,
+              backgroundColor: "red",
+              padding: "16px",
+              borderRadius: "8px",
+              textAlign: "center",
+              color: "white",
+              cursor: "pointer",
+            }}
+            onClick={() => handleClickOpen(index)}
+          >
+            <CardMedia
+              component="img"
+              image={item}
+              alt={"img"}
+              sx={{ height: "220px", objectFit: "contain" }}
+            />
+          </Card>
+        ))
+      ) : (
+        <Typography>No images available</Typography> // Fallback if mediaUrls is undefined
+      )}
 
-      {/* Dialog for previewing the selected card */}
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
         <DialogContent
           sx={{
-            backgroundColor: "red", // Set the red background for the dialog
+            backgroundColor: "red",
             position: "relative",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            padding: "20px", // Add padding around the card
-            height: "60vh", // Make the dialog responsive
-            width: "60vh", // Make the dialog responsive
+            padding: "20px",
+            height: "60vh",
+            width: "60vh",
           }}
         >
-          {/* Left navigation button */}
           <IconButton
             onClick={handlePrevImage}
             sx={{
@@ -175,30 +174,22 @@ const AppImages = () => {
             <ArrowBackIosIcon />
           </IconButton>
 
-          {/* Display the selected card */}
-          {/* <Card
-            sx={{
-              width: "80%", // Increased size for the preview
-              padding: "16px",
-              borderRadius: "8px",
-              textAlign: "center",
-              backgroundColor: "red",
-            }}
-          > */}
-          <CardMedia
-            component="img"
-            image={items[selectedIndex]?.img}
-            alt="Preview"
-            sx={{
-              height: "50vh",
-              width: "50vh",
-              objectFit: "contain",
-              marginBottom: "16px",
-            }} // Larger preview image
-          />
-          {/* </Card> */}
+          {selectedIndex !== null && data.mediaUrls[selectedIndex] ? (
+            <CardMedia
+              component="img"
+              image={data.mediaUrls[selectedIndex]} // Removed .img, now it directly accesses the URL
+              alt="Preview"
+              sx={{
+                height: "50vh",
+                width: "50vh",
+                objectFit: "contain",
+                marginBottom: "16px",
+              }}
+            />
+          ) : (
+            <Typography>No image selected</Typography> // Fallback if selectedIndex is null
+          )}
 
-          {/* Right navigation button */}
           <IconButton
             onClick={handleNextImage}
             sx={{

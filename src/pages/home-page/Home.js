@@ -1,11 +1,17 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  CircularProgress,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../component/Header/Header";
 import Searchbox from "../../component/Search-box/Searchbox";
 import {
-  appData,
-  gamesdata,
   trendingappsdata,
   musicapps,
   newreleased,
@@ -16,12 +22,83 @@ import TrendingApps from "../../component/Categories/TrendingApps";
 import Footer from "../../component/footer/Footer";
 import Advertisment from "../../component/Categories/Advertisment";
 import NewReleased from "../../component/Categories/NewReleased";
+import api from "../../api/api";
 
 const Home = () => {
   const navigate = useNavigate();
   const half = Math.ceil(trendingappsdata.length / 2);
   const firstRowApps = trendingappsdata.slice(0, half);
   const secondRowApps = trendingappsdata.slice(half);
+
+  const [newRelease, setNewRelease] = useState([]);
+  const [populargames, setPopulargames] = useState([]);
+  const [musicApps, setMusicApps] = useState([]);
+  const [upcomingApp, setUpcomingApps] = useState([]);
+
+  const [loading, setLoading] = useState(true); // Loader state
+  const [error, setError] = useState(null); // Error state
+  const [openError, setOpenError] = useState(false); // Snackbar for error
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setLoading(true); // Start loader
+    try {
+      await Promise.all([
+        fetchProducts(),
+        fetchgames(),
+        fetchmusic(),
+        fetchupcoming(),
+      ]);
+    } catch (err) {
+      setError("Failed to fetch data");
+      setOpenError(true); // Open the snackbar if there's an error
+    } finally {
+      setLoading(false); // End loader
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await api.get("/api/apps/new-released");
+      setNewRelease(response.data);
+    } catch (err) {
+      throw new Error("Error fetching new releases");
+    }
+  };
+
+  const fetchgames = async () => {
+    try {
+      const response = await api.get("/api/apps/popular-games");
+      setPopulargames(response.data);
+    } catch (err) {
+      throw new Error("Error fetching popular games");
+    }
+  };
+
+  const fetchmusic = async () => {
+    try {
+      const response = await api.get("/api/apps/music-apps");
+      setMusicApps(response.data);
+    } catch (err) {
+      throw new Error("Error fetching music apps");
+    }
+  };
+
+  const fetchupcoming = async () => {
+    try {
+      const response = await api.get("/api/apps/upcoming-and-available");
+      setUpcomingApps(response.data);
+    } catch (err) {
+      throw new Error("Error fetching upcoming apps");
+    }
+  };
+
+  const handleCloseError = () => {
+    setOpenError(false);
+  };
 
   return (
     <Box
@@ -37,63 +114,85 @@ const Home = () => {
     >
       <Header />
 
-      {/* Search box */}
-      <Box>
-        <Searchbox />
-      </Box>
-      {/* Search box */}
-
-      {/* New  Released Apps */}
-      <Box>
-        <Typography
-          sx={{
-            color: "black",
-            fontSize: "26px",
-            fontWeight: 500,
-            lineHeight: "normal",
-            px: 5,
-          }}
-        >
-          New Released
-        </Typography>
+      {/* Loader */}
+      {loading && (
         <Box
           sx={{
-            padding: 4,
-            overflowX: "scroll",
             display: "flex",
-            gap: 2,
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-            "&::-webkit-scrollbar": {
-              display: "none",
-            },
-            mx: 5,
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50vh",
           }}
         >
-          {appData.map((app, index) => (
-            <Box key={index} sx={{ flexShrink: 0 }}>
-              <Button
-                color="inherit"
-                onClick={() => {
-                  navigate("/app/zomato");
-                }}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  padding: "0.1vh",
-                }}
-              >
-                <NewReleaseApp app={app} />
-              </Button>
-            </Box>
-          ))}
+          <CircularProgress />
         </Box>
-      </Box>
-      {/* New Released Apps */}
+      )}
 
-      <Grid container>
-        {/* Main Content Area */}
-        <Grid item xs={12} md={10.5}>
+      {/* Error Popup */}
+      <Snackbar
+        open={openError}
+        autoHideDuration={6000}
+        onClose={handleCloseError}
+      >
+        <Alert onClose={handleCloseError} severity="error">
+          {error}
+        </Alert>
+      </Snackbar>
+
+      {!loading && (
+        <>
+          {/* Search box */}
+          <Box>
+            <Searchbox />
+          </Box>
+
+          {/* New  Released Apps */}
+          <Box>
+            <Typography
+              sx={{
+                color: "black",
+                fontSize: "26px",
+                fontWeight: 500,
+                lineHeight: "normal",
+                px: 5,
+              }}
+            >
+              New Upcoming Apps
+            </Typography>
+            <Box
+              sx={{
+                padding: 4,
+                overflowX: "scroll",
+                display: "flex",
+                gap: 2,
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+                mx: 5,
+              }}
+            >
+              {newRelease.map((app, index) => (
+                <Box key={index} sx={{ flexShrink: 0 }}>
+                  <Button
+                    color="inherit"
+                    onClick={() => {
+                      navigate("/app/zomato");
+                    }}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      padding: "0.1vh",
+                    }}
+                  >
+                    <NewReleaseApp app={app} />
+                  </Button>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+
           {/* Popular Games */}
           <Box>
             <Typography
@@ -120,14 +219,13 @@ const Home = () => {
                 },
               }}
             >
-              {gamesdata.map((app, index) => (
+              {populargames.map((app, index) => (
                 <Box key={index} sx={{ flexShrink: 0 }}>
                   <PopularGames app={app} />
                 </Box>
               ))}
             </Box>
           </Box>
-          {/* Popular Games */}
 
           {/* Trending Apps */}
           <Box>
@@ -187,7 +285,6 @@ const Home = () => {
               </Grid>
             </Box>
           </Box>
-          {/* Trending Apps */}
 
           {/* Music Apps */}
           <Box>
@@ -218,14 +315,13 @@ const Home = () => {
                 },
               }}
             >
-              {musicapps.map((app, index) => (
+              {musicApps.map((app, index) => (
                 <Box key={index} sx={{ flexShrink: 0 }}>
                   <NewReleaseApp app={app} />
                 </Box>
               ))}
             </Box>
           </Box>
-          {/* Music Apps */}
 
           {/* New Released */}
           <Box>
@@ -256,29 +352,13 @@ const Home = () => {
               }}
             >
               {newreleased.map((app, index) => (
-                <NewReleased
-                  key={index}
-                  title={app.title}
-                  subtitle={app.subtitle}
-                  imgSrc={app.imgSrc}
-                  buttontitle={app.buttontitle}
-                />
+                <NewReleased app={app} />
               ))}
             </Box>
           </Box>
-          {/* New Released */}
-        </Grid>
+        </>
+      )}
 
-        {/* Ad Section */}
-        <Grid
-          item
-          xs={12}
-          md={1.5}
-          sx={{ boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}
-        >
-          <Advertisment />
-        </Grid>
-      </Grid>
       <Footer />
     </Box>
   );

@@ -1,9 +1,24 @@
 import { Box, Button, Typography } from "@mui/material";
-import React from "react";
-import { advertisementData } from "../../component/Categories/data";
+import React, { useEffect, useState } from "react";
 import StarIcon from "@mui/icons-material/Star";
+import api from "../../api/api";
 
 const Advertisment = () => {
+  const [newRelease, setNewRelease] = useState([]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await api.get("/api/apps/new-released");
+      console.log("new released", response.data);
+      setNewRelease(response.data);
+    } catch (err) {
+      console.log("not fetch products", err);
+    }
+  };
   return (
     <Box>
       <Box
@@ -61,10 +76,10 @@ const Advertisment = () => {
             mb: 4,
           }}
         >
-          {advertisementData.map((app, index) => (
+          {newRelease.map((app, index) => (
             <Box sx={{ ml: "30%" }}>
               <img
-                src={app.image}
+                src={app.icon}
                 alt={app.name}
                 style={{
                   width: "60px",

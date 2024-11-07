@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, Typography, Box, Button } from "@mui/material";
 
-function NewReleased({ title, subtitle, imgSrc, buttontitle }) {
+function NewReleased({ app }) {
   return (
     <Card
       sx={{
@@ -11,7 +11,7 @@ function NewReleased({ title, subtitle, imgSrc, buttontitle }) {
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         position: "relative",
         margin: 2,
-        backgroundImage: `url(${imgSrc})`,
+        backgroundImage: `url(${app.imgSrc})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         color: "#FFFFFF",
@@ -32,9 +32,9 @@ function NewReleased({ title, subtitle, imgSrc, buttontitle }) {
       >
         <Box>
           <Typography variant="h5" component="div">
-            {title}
+            {app.title}
           </Typography>
-          <Typography variant="subtitle1">{subtitle} </Typography>
+          <Typography variant="subtitle1">{app.subtitle} </Typography>
         </Box>
         <Button
           variant="contained"
@@ -44,7 +44,7 @@ function NewReleased({ title, subtitle, imgSrc, buttontitle }) {
             alignSelf: "flex-start",
           }}
         >
-          {buttontitle}
+          {app.buttontitle}
         </Button>
       </CardContent>
     </Card>

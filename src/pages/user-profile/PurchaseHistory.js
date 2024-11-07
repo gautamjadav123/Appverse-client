@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import wutheringWaves from "../../Images/new-released/image1.png";
-import pubg from "../../Images/popular-games/Rectangle4.png";
 
 const PurchaseHistory = () => {
   // Example data for the table
@@ -32,7 +31,7 @@ const PurchaseHistory = () => {
       lastDate: "15/07/2024",
       points: 250,
       reward: "No",
-      image: pubg,
+      image: "pubg",
     },
   ];
 

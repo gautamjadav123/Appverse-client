@@ -105,15 +105,17 @@ const SignUpForm = () => {
 
     setLoading(true);
     try {
-      const response = await api.post("/signup", {
+      const response = await api.post("/auth/signup", {
         name: formData.fullName,
         email: formData.email,
         password: formData.password,
       });
 
       const { data } = response;
+      console.log("signup data", data);
       localStorage.setItem("token", data.token);
       localStorage.setItem("name", data.name);
+      localStorage.setItem("userid", response.data._id);
 
       navigate("/");
     } catch (error) {

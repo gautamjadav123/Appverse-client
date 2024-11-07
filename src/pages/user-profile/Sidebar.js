@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Drawer,
@@ -19,13 +19,47 @@ import {
   Settings as SettingsIcon,
   ExitToApp as LogoutIcon,
 } from "@mui/icons-material";
-import profileimg from "../../Images/profile.png";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../../api/api";
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const [imgurl, setImgurl] = useState("");
+  const [username, setUsername] = useState("");
+  const id = localStorage.getItem("userid");
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get(`/api/user/profile/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("all data", response.data);
+        setImgurl(response.data.avatar);
+        setUsername(response.data.fullName);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchProfile();
+  }, [[id, token]]);
+
+  // Function to get initials from the name
+  const getInitials = (username) => {
+    if (!username) return "";
+    const nameParts = username.trim().split(" ");
+    const firstInitial = nameParts[0]?.charAt(0).toUpperCase() || "";
+    const lastInitial =
+      nameParts.length > 1
+        ? nameParts[nameParts.length - 1].charAt(0).toUpperCase()
+        : "";
+    return firstInitial + lastInitial;
+  };
+
   return (
     <Drawer
       variant="permanent"
@@ -57,12 +91,32 @@ const Sidebar = () => {
           ml: 3,
         }}
       >
-        <Avatar
-          alt="Ashlin"
-          src={profileimg}
-          sx={{ width: 40, height: 40, mr: 4 }}
-        />
-        <Typography variant="h6">Ashlin</Typography>
+        {imgurl ? (
+          <img
+            src={imgurl}
+            alt="User Profile"
+            style={{
+              width: "3.5vw",
+              height: "3.5vw",
+              borderRadius: "50%",
+              marginRight: "20px",
+            }}
+          />
+        ) : (
+          <Avatar
+            sx={{
+              width: "3.5vw",
+              height: "3.5vw",
+              backgroundColor: "grey",
+              fontSize: "1vw",
+              fontWeight: "bold",
+              marginRight: "20px",
+            }}
+          >
+            {getInitials(username)}
+          </Avatar>
+        )}
+        <Typography variant="h6">{username}</Typography>
       </Box>
       <Divider />
       <List>
@@ -130,11 +184,6 @@ const Sidebar = () => {
         </ListItem>
         <Divider />
       </List>
-      <Box sx={{ position: "absolute", bottom: 10, left: 10 }}>
-        <Typography variant="caption" color="textSecondary">
-          • Privacy policy • Terms of use
-        </Typography>
-      </Box>
     </Drawer>
   );
 };

@@ -39,7 +39,7 @@ const ForgotPassword = () => {
     setSuccessMessage("");
 
     try {
-      const response = await api.post("/forgot-password", { email });
+      const response = await api.post("/auth/forgot-password", { email });
       setSuccessMessage("A password reset link has been sent to your email.");
       console.log(response.data);
     } catch (error) {

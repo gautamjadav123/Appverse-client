@@ -13,11 +13,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import StarIcon from "@mui/icons-material/Star";
-
-import dominosIcon from "../../Images/new-app/indigo.png";
-import swiggyIcon from "../../Images/new-app/zometo.png";
-import phonepeIcon from "../../Images/new-app/phonepay.png";
-import amazonIcon from "../../Images/new-app/amazone.png";
 import Advertisment from "../../component/Categories/Advertisment";
 
 const apps = [
@@ -26,7 +21,7 @@ const apps = [
     size: "250 MB",
     status: "Installed",
     rating: 4.6,
-    image: dominosIcon,
+    image: "dominosIcon",
     // image: require("../../Images/new-app/adobe.png"),
   },
   {
@@ -34,70 +29,70 @@ const apps = [
     size: "150 MB",
     status: "Installed",
     rating: 4.3,
-    image: swiggyIcon,
+    image: "swiggyIcon",
   },
   {
     name: "Phone Pe",
     size: "200 MB",
     status: "Installing",
     rating: 4.4,
-    image: phonepeIcon,
+    image: "phonepeIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
   {
     name: "Amazon",
     size: "300 MB",
     status: "Installed",
     rating: 4.0,
-    image: amazonIcon,
+    image: "amazonIcon",
   },
 ];
 

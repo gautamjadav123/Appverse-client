@@ -60,13 +60,14 @@ const Login = () => {
 
     setIsLoading(true); // Start loading
     try {
-      const response = await api.post("/login", {
+      const response = await api.post("/auth/login", {
         email: formData.username,
         password: formData.password,
       });
       console.log(response);
       localStorage.setItem("token", response.data.jwtToken);
       localStorage.setItem("name", response.data.name);
+      localStorage.setItem("userid", response.data._id);
       setIsLoading(false); // Stop loading on success
       navigate("/");
     } catch (error) {
@@ -359,7 +360,20 @@ const Login = () => {
                     Create New Account
                   </Link>
                 </Typography>
-                <div id="googleSignInDiv" />{" "}
+                <Button
+                  variant="outlined"
+                  startIcon={<img src={googlelogo} alt="Google logo" />}
+                  sx={{
+                    borderRadius: "10px",
+                    color: "black",
+                    backgroundColor: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                    },
+                  }}
+                >
+                  Sign up using Google
+                </Button>{" "}
                 {/* Google Sign-In button rendered here */}
               </Box>
             </Box>

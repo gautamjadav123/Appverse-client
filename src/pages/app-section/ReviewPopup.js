@@ -11,12 +11,27 @@ import {
   Typography,
 } from "@mui/material";
 
-const ReviewPopup = ({ open, onClose }) => {
+const ReviewPopup = ({ open, onClose, onSubmit }) => {
   const [userRating, setUserRating] = useState(0);
+  const [title, setTitle] = useState(""); // Store the title
+  const [description, setDescription] = useState(""); // Store the description
 
   // Handle user rating change
   const handleRatingChange = (event, newValue) => {
     setUserRating(newValue);
+  };
+
+  // Handle form submission
+  const handleSubmit = () => {
+    // Create the review object
+    const newReview = {
+      rating: userRating,
+      title,
+      description,
+    };
+
+    // Call the parent function to handle adding the review
+    onSubmit(newReview);
   };
 
   return (
@@ -48,6 +63,8 @@ const ReviewPopup = ({ open, onClose }) => {
           fullWidth
           variant="outlined"
           placeholder="Give your review a title (optional)"
+          value={title} // Controlled input for title
+          onChange={(e) => setTitle(e.target.value)} // Update title state
           sx={{
             marginBottom: "16px",
             backgroundColor: "#fff",
@@ -64,12 +81,14 @@ const ReviewPopup = ({ open, onClose }) => {
           rows={4}
           variant="outlined"
           placeholder="Share your experience with this app (optional)"
+          value={description} // Controlled input for description
+          onChange={(e) => setDescription(e.target.value)} // Update description state
           sx={{ backgroundColor: "#fff", borderRadius: "4px" }}
         />
       </DialogContent>
       <DialogActions sx={{ backgroundColor: "#e0e7ff" }}>
         <Button
-          onClick={onClose}
+          onClick={handleSubmit} // Call handleSubmit when the user clicks submit
           sx={{
             backgroundColor: "#4285F4",
             color: "#FFF",

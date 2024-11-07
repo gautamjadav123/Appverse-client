@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
-const AppDescription = () => {
+const AppDescription = ({ data }) => {
   return (
     <Box
       sx={{
@@ -21,12 +21,7 @@ const AppDescription = () => {
         Description
       </Typography>
       <Typography variant="body1" sx={{ color: "#333" }}>
-        Zomato is a comprehensive food discovery and restaurant review app
-        designed to help users find and explore dining options. It features
-        detailed restaurant listings, user reviews, menus, and photos to assist
-        in making informed dining choices. Zomato also offers features for
-        online food ordering and table reservations, making it a versatile tool
-        for food enthusiasts and those seeking convenient dining solutions.
+        {data.description}
       </Typography>
     </Box>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Chip, Typography } from "@mui/material";
 import Header from "../../component/Header/Header";
 import AppSidebar from "./AppSidebar";
@@ -11,8 +11,25 @@ import TabletIcon from "@mui/icons-material/Tablet";
 import AppleIcon from "@mui/icons-material/Apple";
 import AppsFAQ from "./AppsFAQ";
 import Advertisment from "../../component/Categories/Advertisment";
+import api from "../../api/api";
 
 export default function AppMainPage() {
+  const [data, setData] = useState("");
+  console.log("data", data);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await api.get("/api/appsdata/zomato");
+      console.log("app data", response.data);
+      setData(response.data);
+    } catch (err) {
+      throw new Error("Error fetching apps data");
+    }
+  };
   return (
     <>
       <Box
@@ -44,7 +61,7 @@ export default function AppMainPage() {
             top: 0,
           }}
         >
-          <AppSidebar />
+          <AppSidebar data={data} />
         </Box>
 
         {/* Main Content Section */}
@@ -54,10 +71,10 @@ export default function AppMainPage() {
               <Searchbox />
             </Box>
             <Box>
-              <AppImages />
+              <AppImages data={data} />
             </Box>
             <Box>
-              <AppDescription />
+              <AppDescription data={data} />
             </Box>
             <Box>
               <AppRatings />
@@ -158,7 +175,7 @@ export default function AppMainPage() {
             </Box>
 
             <Box>
-              <AppsFAQ />
+              <AppsFAQ data={data} />
             </Box>
             <Box>
               <Box

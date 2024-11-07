@@ -8,30 +8,7 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const faqs = [
-  {
-    question: "How can I create an account on Zomato?",
-    answer:
-      "To create an account on Zomato, go to the sign-up page, enter your details, and follow the instructions to verify your email or phone number.",
-  },
-  {
-    question: "How do I make a reservation through the app?",
-    answer:
-      "You can make a reservation through the Zomato app by selecting the restaurant and clicking on the 'Book a Table' option.",
-  },
-  {
-    question: "Can I order food for delivery from any restaurant?",
-    answer:
-      "You can order food for delivery from any restaurant that offers delivery services through Zomato.",
-  },
-  {
-    question: "What is Zomato Gold?",
-    answer:
-      "Zomato Gold is a membership program that offers exclusive discounts and benefits at partner restaurants.",
-  },
-];
-
-function AppsFAQ() {
+function AppsFAQ({ data }) {
   return (
     <Box
       sx={{
@@ -47,16 +24,20 @@ function AppsFAQ() {
         FAQ'S
       </Typography>
 
-      {faqs.map((faq, index) => (
-        <Accordion key={index}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{faq.question}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography>{faq.answer}</Typography>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+      {data?.faqs?.length > 0 ? (
+        data.faqs.map((faq, index) => (
+          <Accordion key={index}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>{faq.question}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{faq.answer}</Typography>
+            </AccordionDetails>
+          </Accordion>
+        ))
+      ) : (
+        <Typography>No FAQs available.</Typography>
+      )}
     </Box>
   );
 }
